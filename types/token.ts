@@ -26,7 +26,7 @@ export interface Metadata {
   name: string;
   description: string;
   external_url?: string;
-  content: {
+  content?: {
     mime: string;
     uri: string;
   };
@@ -43,6 +43,16 @@ export interface Collection {
   released_at: number;
   chain: string;
   chainId: number;
+}
+
+export interface Token {
+  collectionAddress: Address;
+  creator: Address;
+  released_at: number;
+  chainId: number;
+  chain: string;
+  tokenId: number;
+  uri: string;
 }
 
 export interface MintCommentEvent {
