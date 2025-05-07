@@ -1,6 +1,7 @@
 import OgBackground from "@/components/Og/token/OgBackground";
 import OgFooter from "@/components/Og/token/OgFooter";
 import OgHeader from "@/components/Og/token/OgHeader";
+import OgWritingToken from "@/components/Og/token/OgWritingToken";
 import { NextRequest } from "next/server";
 import { getFetchableUrl } from "@/lib/protocolSdk/ipfs/gateway";
 import getUsername from "@/lib/getUsername";
@@ -43,6 +44,8 @@ export async function GET(req: NextRequest) {
     spectralFont,
   ]);
 
+  const isWritingToken = metadata.metadata?.writing !== undefined;
+  
   let orientation = 1;
   if (metadata.metadata.image) {
     const imageUrl = getFetchableUrl(metadata.metadata.image) || "";
@@ -65,17 +68,21 @@ export async function GET(req: NextRequest) {
           width: "100%",
           height: "100%",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: isWritingToken ? "flex-start" : "center",
         }}
       >
-        <OgBackground
-          backgroundUrl={
-            getFetchableUrl(
-              metadata.metadata.image || `${VERCEL_OG}/images/placeholder.png`,
-            ) || ""
-          }
-          orientation={orientation}
-        />
+        {isWritingToken ? ( <OgWritingToken text={metadata.metadata.writing} />
+        ) : (
+          <OgBackground
+            backgroundUrl={
+              getFetchableUrl(
+                metadata.metadata.image || `${VERCEL_OG}/images/placeholder.png`,
+              ) || ""
+            }
+            orientation={orientation}
+          />
+        )}
+
         <div
           style={{
             position: "relative",
